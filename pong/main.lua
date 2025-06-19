@@ -29,10 +29,10 @@ end
 function _update()
 	p1:update()
 	p2:update()
-	ball:update()
+	ball:update(p1, p2)
 
-	ball:check_player_coll(p1)
-	ball:check_player_coll(p2)
+	-- ball:check_player_coll(p1)
+	-- ball:check_player_coll(p2)
 	
 end
 

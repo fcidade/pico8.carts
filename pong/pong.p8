@@ -1,6 +1,10 @@
 pico-8 cartridge // http://www.pico-8.com
 version 42
 __lua__
+-- libs
+#include ../common/vector.lua
+
+-- app
 #include player.lua
 #include ball.lua
 #include main.lua

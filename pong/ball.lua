@@ -2,78 +2,58 @@
 
 ball_spr = 3
 ball_spr_coll = 4
-ball_init_spd = 1
+ball_init_spd = 2
 
-Ball = {
-     x = 0
-    ,y = 0
-    ,dirx = ball_init_spd
-    ,diry = ball_init_spd
-    ,spd = ball_init_spd
-}
+Ball = {}
 
-function Ball:update()
-    self.left = self.x
-    self.right = self.x + tile_width
-    self.top = self.y
-    self.bottom = self.y + tile_height
+function Ball:update(player1, player2)
+
+    self.is_colliding_with_p1 = self:check_player_coll(player1) 
+    self.is_colliding_with_p2 = self:check_player_coll(player2)
+    self.is_colliding = (
+        self.is_colliding_with_p1
+        or self.is_colliding_with_p2
+    )
+
+    self.left = self.pos.x
+    self.right = self.pos.x + tile_width
+    self.top = self.pos.y
+    self.bottom = self.pos.y + tile_height
 
     if self.left <= 0 then
-        self.dirx = self.spd
+        self.dir.x = self.spd
     end
     if self.right >= screen_width then
-        self.dirx = -self.spd
+        self.dir.x = -self.spd
     end
     if self.top <= field_top then
-        self.diry = self.spd
+        self.dir.y = self.spd
     end
     if self.bottom >= screen_height then
-        self.diry = -self.spd
+        self.dir.y = -self.spd
     end
 
-    self.x += self.dirx
-    self.y += self.diry
+    if self.is_colliding_with_p1 then
+        self.dir.x += player1.dir.x
+        self.dir.y += player1.dir.y
+    end
+
+    if self.is_colliding_with_p2 then
+        self.dir.x += player2.dir.x
+        self.dir.y += player2.dir.y
+    end
+
+    self.dir = self.dir:normalized()
+
+    self.pos.x += self.dir.x * self.spd
+    self.pos.y += self.dir.y * self.spd
+
+
+    self.coll_rect:update(self.pos.x, self.pos.y)
 end
 
 function Ball:check_player_coll(player)
-    -- if self.coll_timer == nil then
-    --     self.coll_timer = 0
-    -- end
-    -- self.coll_timer += 1
-    -- if self.coll_timer < 500 then
-    --     return
-    -- end
-    -- angle_player_and_ball = atan2(
-    --     player.y - self.y,
-    --     player.x - self.x
-    -- )
-
-    -- player_dir_angle = atan2(
-    --     player.diry,
-    --     player.dirx
-    -- )
-
-    -- n funciona pq ele ta sendo sobrescrito
-    self.is_colliding = (
-        self.left < player.right and
-        self.right > player.left and
-        self.top < player.bottom and
-        self.bottom > player.top
-    )
-    -- if self.is_colliding then
-
-    --     if player.dirx + player.diry != 0 then
-    --         -- self.dirx = cos(player_dir_angle)
-    --         -- self.diry = -sin(player_dir_angle)
-    --     else
-    --         self.dirx = cos(angle_player_and_ball)
-    --         -- self.dirx = -cos(angle_player_and_ball) + cos(player_dir_angle)
-    --                 -- self.dirx = cos(player_dir_angle)
-    --         self.diry = -sin(angle_player_and_ball)
-    --         -- self.diry = -sin(angle_player_and_ball) + sin(player_dir_angle)
-    --                 -- self.diry = -sin(player_dir_angle)
-    --     end
-    -- end
+    return self.coll_rect:is_colliding_with(player.coll_rect)
 end
 
 function Ball:draw()
@@ -83,14 +63,20 @@ function Ball:draw()
         s = ball_spr_coll
     end
 
-    spr(s, self.x, self.y)
+    spr(s, self.pos.x, self.pos.y)
+
+    self.coll_rect:draw()
+    print(self.is_colliding)
 end
 
 function Ball:new(init_x, init_y)
-	o = {}
-	setmetatable(o, Ball)
-    o.x = init_x
-    o.y = init_y
+	local obj = {
+        pos = Vec2:new(init_x, init_y)
+        ,dir = Vec2:new(0, 0)
+        ,spd = ball_init_spd
+        ,coll_rect = Rect:new(0,0,8,8)
+    }
+	setmetatable(obj, self)
     self.__index = self
-	return o
+	return obj
 end
