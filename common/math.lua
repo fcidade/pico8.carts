@@ -12,8 +12,13 @@ function Vec2:new(x, y)
 	return obj
 end
 
+function Vec2:length()
+    return sqrt(self.x * self.x + self.y * self.y)
+end
+
+
 function Vec2:normalized()
-    local length = sqrt(self.x * self.x + self.y * self.y)
+    local length = self:length()
     if length == 0 then
         return Vec2:new(0, 0)
     end
@@ -30,8 +35,8 @@ function Rect:update(parent_x, parent_y)
 end
 
 function Rect:draw()
-    color(rnd())
-    rect(self.x, self.y, self.x + self.w, self.y + self.h)
+    -- color(2)
+    -- rect(self.x, self.y, self.x + self.w, self.y + self.h)
 end
 
 function Rect:new(x, y, w, h)
