@@ -1,5 +1,38 @@
 {
   "markdown.copyFiles.destination": {
     "**/*.md": "${documentDirName}/.docs/${fileName}"
-  }
+  },
+  "Lua.diagnostics.disable": [
+    "undefined-global",
+    "lowercase-global",
+    "err-esc"
+  ],
+  "Lua.workspace.library": [
+    "${addons}/pico8/module/library"
+  ],
+  "Lua.runtime.version": "Lua 5.2",
+  "Lua.workspace.checkThirdParty": false,
+  "Lua.runtime.nonstandardSymbol": [
+    "//", "+=", "-=", 
+  ],
+  "Lua.runtime.builtin": {
+    "basic": "disable",
+    "bit": "disable",
+    "bit32": "disable",
+    "builtin": "disable",
+    "coroutine": "disable",
+    "debug": "disable",
+    "ffi": "disable",
+    "io": "disable",
+    "jit": "disable",
+    "math": "disable",
+    "os": "disable",
+    "package": "disable",
+    "string": "disable",
+    "table": "disable",
+    "table.clear": "disable",
+    "table.new": "disable",
+    "utf8": "disable"
+  },
+  "Lua.runtime.unicodeName": true
 }

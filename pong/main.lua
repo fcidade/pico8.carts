@@ -17,10 +17,12 @@ p_init_y = flr((screen_height / 2) + (tile_height / 2))
 p1_init_x = tile_width * 3
 p2_init_x = screen_width - tile_width * 4
 
-ball_init_x = flr((screen_width / 2) - (tile_width/2))
-ball_init_y = flr((screen_height / 2) + (tile_height/2))
+ball_init_x = flr((screen_width / 2) - (tile_width / 2))
+ball_init_y = flr((screen_height / 2) + (tile_height / 2))
 
 function _init()
+	rawkeys_init()
+
 	music(0)
 
 	p1 = Player:new(0, 1, p1_init_x, p_init_y)
@@ -36,13 +38,12 @@ function player_score(player)
 	ball:reset()
 end
 
-
 function _update()
 	p1:update()
 	p2:update()
 	ball:update(p1, p2)
 
-	if ball.pos.y > goal_top and ball.pos.y < goal_bottom then 
+	if ball.pos.y > goal_top and ball.pos.y < goal_bottom then
 		-- color(2)
 		-- print('goal y', 0, 0)
 		if ball.pos.x < (tile_width / 2) then
@@ -57,11 +58,11 @@ function _update()
 end
 
 function _draw()
-	cls() 
+	cls()
 	color(3)
 
-	map(0 ,	0,	0,	0, 16, 16)
-	map(16, 0,	0,	0,	16,	16)
+	map(0, 0, 0, 0, 16, 16)
+	map(16, 0, 0, 0, 16, 16)
 
 	p1:draw()
 	p2:draw()

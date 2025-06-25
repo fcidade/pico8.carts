@@ -2,7 +2,9 @@ pico-8 cartridge // http://www.pico-8.com
 version 42
 __lua__
 -- libs
+#include ../common/constants.lua
 #include ../common/math.lua
+#include ../common/rawkeys.lua
 
 -- app
 #include player.lua

@@ -11,16 +11,17 @@ function Player:update()
     self.dir.x = 0
     self.dir.y = 0
 
-    if btn(⬅️, self.id) and self.left > 0 then
+    local pkeys = self:get_player_keys(self.id)
+    if kbtn(pkeys.left) and self.left > 0 then
         self.dir.x -= self.spd
     end
-    if btn(➡️, self.id) and self.right < screen_width then
+    if kbtn(pkeys.right) and self.right < screen_width then
         self.dir.x += self.spd
     end
-    if btn(⬆️, self.id) and self.top > field_top then
+    if kbtn(pkeys.up) and self.top > field_top then
         self.dir.y -= self.spd
     end
-    if btn(⬇️, self.id) and self.bottom < screen_height then
+    if kbtn(pkeys.down) and self.bottom < screen_height then
         self.dir.y += self.spd
     end
 
@@ -28,6 +29,23 @@ function Player:update()
     self.pos.y += self.dir.y
 
     self.coll_rect:update(self.pos.x, self.pos.y)
+end
+
+function Player:get_player_keys(id)
+    return ({
+        [0] = {
+            left = key.a,
+            right = key.d,
+            up = key.w,
+            down = key.s
+        },
+        [1] = {
+            left = key.left,
+            right = key.right,
+            up = key.up,
+            down = key.down
+        },
+    })[id]
 end
 
 function Player:draw()
