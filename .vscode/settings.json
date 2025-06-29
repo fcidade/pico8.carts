@@ -5,7 +5,8 @@
   "Lua.diagnostics.disable": [
     "undefined-global",
     "lowercase-global",
-    "err-esc"
+    "err-esc",
+    "param-type-mismatch"
   ],
   "Lua.workspace.library": [
     "${addons}/pico8/module/library"
