@@ -3,15 +3,18 @@
 Player = {}
 
 function Player:update()
-    local left_key, right_ley = 0, 1
-    if btn(left_key) then
+    if btn(keys.left) then
         self.pos.x -= 1
     end
-    if btn(right_ley) then
+    if btn(keys.right) then
         self.pos.x += 1
     end
     if self.pos.x <= 0 then
         self.pos.x = 0
+    end
+
+    if btn(keys.a) then
+        instantiate(Bullet:new(self.pos.x, self.pos.y))
     end
     
     if self.pos.x >= screen.w - self.w then

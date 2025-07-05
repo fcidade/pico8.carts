@@ -65,3 +65,12 @@ stat_codes = {
     breadcrumb_label = 100, -- Current breadcrumb label, or nil
     frame_by_frame = 110,   -- Returns true when in frame-by-frame mode
 }
+
+keys = {
+    left = 0,
+    right = 1,
+    up = 2,
+    down = 3,
+    a = 4,
+    b = 5,
+}
