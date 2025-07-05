@@ -1,6 +1,10 @@
 -- Constants
 sprites = {
-    player = {64, 66},
+    player = {
+        left = 64, 
+        middle = 66, 
+        right = 68,
+    },
     enemy1 = {16, 18},
     enemy2 = {20, 22},
     enemy3 = {24, 27},
