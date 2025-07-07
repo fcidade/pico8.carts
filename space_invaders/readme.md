@@ -3,7 +3,7 @@ example image:
 
 <img src="./.docs/SpaceInvaders-Gameplay.gif" width="100%">
 
-
+<img src=".docs/space_invaders_1.gif" width="100%">
 
 todo:
 - inimigos atirarem
