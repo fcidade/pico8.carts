@@ -20,6 +20,10 @@ function Bullet:update()
     self.pos.y -= 1
 end
 
+function Bullet:hit(hitby)
+    self.deleted = true
+end
+
 
 function Bullet:draw()
     color(colors.yellow)

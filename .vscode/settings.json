@@ -6,7 +6,8 @@
     "undefined-global",
     "lowercase-global",
     "err-esc",
-    "param-type-mismatch"
+    "param-type-mismatch",
+    "duplicate-set-field"
   ],
   "Lua.workspace.library": [
     "${addons}/pico8/module/library"
