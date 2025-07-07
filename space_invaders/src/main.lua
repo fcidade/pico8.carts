@@ -26,16 +26,28 @@ sprites = {
 
 -- Main
 
-entities = {}
-enemies = {}
-grid_w = 6
+local entities = {}
+local enemies = {}
+local grid_w = 6
 
-stars = {}
+local stars = {}
 
-function _init()
-    player = Player:new()
+local score = 0
 
-    for i = 0, (grid_w * 5) - 1 do
+local StatePlaying = 0
+local StateWon = 1
+local StateLost = 2
+
+-- local state = StateWon
+local state = StatePlaying
+
+function reset()
+    state = StatePlaying
+    enemies = {}
+    entities = {}
+
+    -- for i = 0, (grid_w * 5) - 1 do
+    for i = 0, (grid_w * 2) - 1 do
         local sprs = sprites.enemy1
         if i >= grid_w * 4 then
             sprs = sprites.enemy2
@@ -44,6 +56,12 @@ function _init()
         end
         add(enemies, Enemy:new(i % grid_w, flr(i / grid_w), sprs))
     end
+end
+
+function _init()
+    player = Player:new()
+
+    reset()
 
     for i = 0, 100 do
         stars[i] = { x = rnd(screen.w), y = rnd(screen.h), spd = rnd(3) + 1 }
@@ -55,6 +73,13 @@ function instantiate(entity)
 end
 
 function _update()
+    if state ~= StatePlaying then
+        if btn(4) or btn(5) then
+            reset()
+        end
+        return
+    end
+
     foreach(entities, function(entity)
         if entity.deleted then
             return
@@ -70,23 +95,32 @@ function _update()
             then
                 enemy:hit(entity)
                 entity:hit(enemy)
+                if enemy.life <= 0 then
+                    score += 100
+                end
                 dprint("HIT")
             end
         end)
     end)
 
+    local all_enemies_dead = true
     foreach(enemies, function(e)
         if e.deleted then
             return
         end
+        all_enemies_dead = false
         e:update()
     end)
+    if all_enemies_dead then
+        state = StateWon
+    end
     foreach(entities, function(e)
         if e.deleted then
             return
         end
         e:update()
     end)
+
 
     player:update()
 
@@ -105,6 +139,25 @@ function _draw()
     -- line(0, 0, 0, screen.h, colors.dark_blue)
     -- line(screen.w - 1, 0, screen.w - 1, screen.h, colors.dark_blue)
 
+    if state == StateWon then
+        print("you won!")
+        print("press any key to continue!", 0, 16)
+        return
+    end
+    if state == StateLost then
+        print("you lost!")
+        print("press any key to continue!", 0, 16)
+        return
+    end
+    
+
+    if state ~= StatePlaying then
+        return
+    end
+
+
+
+    --
     foreach(stars, function(e)
         -- pset(e.x, e.y, colors.dark_blue)
         local trailsize = e.spd
@@ -137,9 +190,20 @@ function _draw()
     end)
     player:draw()
 
+    -- Score
+    color(colors.white)
+    print("score: " .. tostr(score), 0, 0)
+
+
+
+    -- Debug
     local y = 0
     foreach(dbg_messages, function(m)
-        print(m, 0, y)
+        print(m, 20, 20 + y)
         y += 6
     end)
+end
+
+function on_win() 
+
 end
