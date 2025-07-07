@@ -46,8 +46,9 @@ function reset()
     enemies = {}
     entities = {}
 
-    -- for i = 0, (grid_w * 5) - 1 do
-    for i = 0, (grid_w * 2) - 1 do
+    for i = 0, (grid_w * 5) - 1 do
+    -- for i = 0, (grid_w * 1) - 1 do
+    -- for i = 0, (grid_w * 6) - 1 do
         local sprs = sprites.enemy1
         if i >= grid_w * 4 then
             sprs = sprites.enemy2
@@ -74,7 +75,7 @@ end
 
 function _update()
     if state ~= StatePlaying then
-        if btn(4) or btn(5) then
+        if btnp(4) or btnp(5) then
             reset()
         end
         return
@@ -98,21 +99,27 @@ function _update()
                 if enemy.life <= 0 then
                     score += 100
                 end
-                dprint("HIT")
             end
         end)
     end)
 
     local all_enemies_dead = true
+    local enemies_invaded = false
     foreach(enemies, function(e)
         if e.deleted then
             return
         end
         all_enemies_dead = false
+        if e.pos.y >= screen.h then
+            enemies_invaded = true
+        end
         e:update()
     end)
     if all_enemies_dead then
         state = StateWon
+    end
+    if enemies_invaded then
+        state = StateLost
     end
     foreach(entities, function(e)
         if e.deleted then
@@ -155,26 +162,12 @@ function _draw()
         return
     end
 
-
-
     --
     foreach(stars, function(e)
         -- pset(e.x, e.y, colors.dark_blue)
         local trailsize = e.spd
         line(e.x, e.y, e.x, e.y - trailsize, colors.dark_blue)
     end)
-
-    -- for i = 0, screen.w/16+1 do
-    --     for j = 0, screen.h/16+1 do
-    --         if (i + j) % 2 == 0 then
-    --             color(colors.indigo)
-    --         else
-    --             color(colors.peach)
-    --         end
-    --         local x, y = i*16, j*16
-    --         rectfill(x, y, x+ 16, y+16)
-    --     end
-    -- end
 
     foreach(enemies, function(e)
         if e.deleted then
@@ -194,16 +187,10 @@ function _draw()
     color(colors.white)
     print("score: " .. tostr(score), 0, 0)
 
-
-
     -- Debug
     local y = 0
     foreach(dbg_messages, function(m)
         print(m, 20, 20 + y)
         y += 6
     end)
-end
-
-function on_win() 
-
 end
