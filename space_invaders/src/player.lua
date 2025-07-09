@@ -21,7 +21,7 @@ function Player:update()
 
     if btn(keys.a) and can_shoot then
         sfx(0)
-        instantiate(Bullet:new(self.pos.x + 7, self.pos.y))
+        instantiate(Bullet:new(self.pos.x + 7, self.pos.y, false))
         self.shoot_timer = 0
     end
 

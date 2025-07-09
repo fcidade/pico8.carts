@@ -9,5 +9,5 @@ todo:
 - inimigos atirarem
 - tiro do inimigo em mim = -vida
 - vida <= 0 => game over
-- inimigos voando 
+- inimigos voando com padroes diferentes
 - paredes destrutiveis

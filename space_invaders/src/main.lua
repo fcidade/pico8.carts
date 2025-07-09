@@ -81,6 +81,13 @@ function _update()
         return
     end
 
+    -- Remove deleted entities from the entities table
+    for i = #entities, 1, -1 do
+        if entities[i].deleted then
+            deli(entities, i)
+        end
+    end
+
     foreach(entities, function(entity)
         if entity.deleted then
             return
@@ -193,4 +200,7 @@ function _draw()
         print(m, 20, 20 + y)
         y += 6
     end)
+
+    -- mais debug
+    print("# entities = " .. tostr(#entities), 0, 128-8)
 end

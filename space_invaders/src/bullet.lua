@@ -17,22 +17,40 @@ function Bullet:update()
     -- if self.pos.x >= screen.w - self.w then
     --     self.pos.x = screen.w - self.w
     -- end
-    self.pos.y -= 1
+    local diry = 1
+    if self.is_enemy then
+        diry = -1
+    end
+    self.pos.y -= diry
+
+    if self.pos.y > screen.h then
+        self.deleted = true
+    end
 end
 
 function Bullet:hit(hitby)
+    if self.is_enemy then 
+        return
+    end
     self.deleted = true
 end
 
 
 function Bullet:draw()
-    color(colors.yellow)
-    pset(self.pos.x, self.pos.y)
-    color(colors.orange)
-    pset(self.pos.x, self.pos.y + 1 )
+    if self.is_enemy then 
+        color(colors.red)
+        circfill(self.pos.x, self.pos.y, 1)
+        color(colors.orange)
+        circfill(self.pos.x, self.pos.y + 1 , 1)
+    else
+        color(colors.yellow)
+        pset(self.pos.x, self.pos.y)
+        color(colors.orange)
+        pset(self.pos.x, self.pos.y + 1 )
+    end
 end
 
-function Bullet:new(init_x, init_y)
+function Bullet:new(init_x, init_y, is_enemy)
     local w = 16
 	local obj = {
         spr = spr
@@ -41,6 +59,7 @@ function Bullet:new(init_x, init_y)
         ,dir = Vec2:new(0, 0)
         ,spd = 2
         ,w = w
+        , is_enemy = is_enemy
     }
     setmetatable(obj, self)
     self.__index = self
