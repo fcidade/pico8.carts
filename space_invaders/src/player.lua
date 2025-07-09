@@ -3,6 +3,9 @@
 Player = {}
 
 function Player:update()
+    if self.life <= 0 then
+        self.deleted = true
+    end
     self.shoot_timer += 1
     local can_shoot = self.shoot_timer >= 5
 
@@ -31,6 +34,12 @@ function Player:update()
 
 end
 
+function Player:hit(hitby)
+    if hitby.is_enemy then
+        self.life -= 1
+    end
+end
+
 function Player:draw()
     spr(self.spr, self.pos.x, self.pos.y, 2, 2)
 
@@ -50,6 +59,7 @@ function Player:new()
         w = w,
         coll_rect = Rect:new(0, 0, w, w),
         shoot_timer = 100,
+        life = 3,
     }
     setmetatable(obj, self)
     self.__index = self

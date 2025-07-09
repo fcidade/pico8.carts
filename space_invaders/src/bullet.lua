@@ -29,9 +29,6 @@ function Bullet:update()
 end
 
 function Bullet:hit(hitby)
-    if self.is_enemy then 
-        return
-    end
     self.deleted = true
 end
 

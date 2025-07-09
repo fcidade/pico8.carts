@@ -11,3 +11,4 @@ todo:
 - vida <= 0 => game over
 - inimigos voando com padroes diferentes
 - paredes destrutiveis
+- criar arquivo de "ui"

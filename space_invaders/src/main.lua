@@ -21,7 +21,8 @@ sprites = {
     barrier = {
         healthy = { 13, 14, 15, 29, 30, 31 },
         damaged = { 45, 46, 47, 61, 62, 63 },
-    }
+    },
+    heart = 1,
 }
 
 -- Main
@@ -43,6 +44,8 @@ local state = StatePlaying
 
 function reset()
     state = StatePlaying
+    score = 0
+    player = Player:new()
     enemies = {}
     entities = {}
 
@@ -92,6 +95,17 @@ function _update()
         if entity.deleted then
             return
         end
+        if entity.is_enemy then
+            if entity.pos.x >= player.pos.x
+                and entity.pos.x <= player.pos.x + 16
+                and entity.pos.y >= player.pos.y
+                and entity.pos.y <= player.pos.y + 16
+            then
+                entity:hit(player)
+                player:hit(entity)
+            end
+            return
+        end
         foreach(enemies, function(enemy)
             if enemy.deleted then
                 return
@@ -126,6 +140,9 @@ function _update()
         state = StateWon
     end
     if enemies_invaded then
+        state = StateLost
+    end
+    if player.deleted or player.life <= 0 then
         state = StateLost
     end
     foreach(entities, function(e)
@@ -194,6 +211,11 @@ function _draw()
     color(colors.white)
     print("score: " .. tostr(score), 0, 0)
 
+    -- Lifes
+    for life = 1,player.life do
+        spr(sprites.heart, 128-life*10, 0)
+    end
+
     -- Debug
     local y = 0
     foreach(dbg_messages, function(m)
@@ -202,5 +224,5 @@ function _draw()
     end)
 
     -- mais debug
-    print("# entities = " .. tostr(#entities), 0, 128-8)
+    -- print("# entities = " .. tostr(#entities), 0, 128-8)
 end
